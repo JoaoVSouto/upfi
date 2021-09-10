@@ -13,6 +13,7 @@ type Image = {
   title: string;
   description: string;
   url: string;
+  ts: number;
 };
 
 type ImagesAPIResponse = {
@@ -31,19 +32,22 @@ export default function Home(): JSX.Element {
   } = useInfiniteQuery(
     'images',
     ({ pageParam = null }) =>
-      api.get<ImagesAPIResponse>('/api/images', {
-        params: {
-          after: pageParam,
-        },
-      }),
+      api
+        .get<ImagesAPIResponse>('/api/images', {
+          params: {
+            after: pageParam,
+          },
+        })
+        .then(({ data: incomingData }) => incomingData),
     {
-      getNextPageParam: lastPage => lastPage.data.after,
+      getNextPageParam: lastPage => lastPage.after,
     }
   );
 
-  const formattedData = useMemo(() => {
-    // TODO FORMAT AND FLAT DATA ARRAY
-  }, [data]);
+  const formattedData = useMemo(
+    () => data.pages.map(page => page.data).flat(),
+    [data]
+  );
 
   // TODO RENDER LOADING SCREEN
 
