@@ -8,6 +8,18 @@ import { api } from '../services/api';
 import { Loading } from '../components/Loading';
 import { Error } from '../components/Error';
 
+type Image = {
+  id: string;
+  title: string;
+  description: string;
+  url: string;
+};
+
+type ImagesAPIResponse = {
+  data: Image[];
+  after: string | null;
+};
+
 export default function Home(): JSX.Element {
   const {
     data,
@@ -18,9 +30,15 @@ export default function Home(): JSX.Element {
     hasNextPage,
   } = useInfiniteQuery(
     'images',
-    // TODO AXIOS REQUEST WITH PARAM
-    ,
-    // TODO GET AND RETURN NEXT PAGE PARAM
+    ({ pageParam = null }) =>
+      api.get<ImagesAPIResponse>('/api/images', {
+        params: {
+          after: pageParam,
+        },
+      }),
+    {
+      getNextPageParam: lastPage => lastPage.data.after,
+    }
   );
 
   const formattedData = useMemo(() => {
