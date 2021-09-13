@@ -45,7 +45,7 @@ export default function Home(): JSX.Element {
   );
 
   const formattedData = useMemo(
-    () => data.pages.map(page => page.data).flat(),
+    () => data?.pages.map(page => page.data).flat(),
     [data]
   );
 
