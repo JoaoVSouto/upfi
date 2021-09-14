@@ -69,17 +69,6 @@ describe('Home page', () => {
     );
   });
 
-  it('should be able to render loading', async () => {
-    apiMock.onGet('/api/images').reply(200);
-
-    render(<Home />, { wrapper });
-
-    expect(
-      screen.getByRole('heading', { name: 'Carregando aplicação...' })
-    ).toBeInTheDocument();
-    expect(screen.getByRole('progressbar')).toBeInTheDocument();
-  });
-
   it('should be able to render error', async () => {
     const mockedConsoleError = jest.fn();
     Object.defineProperty(console, 'error', {
@@ -386,5 +375,16 @@ describe('Home page', () => {
     ).toBeInTheDocument();
 
     expect(loadMoreButton).not.toBeInTheDocument();
+  });
+
+  it('should be able to render loading', async () => {
+    apiMock.onGet('/api/images').reply(200);
+
+    render(<Home />, { wrapper });
+
+    expect(
+      screen.getByRole('heading', { name: 'Carregando aplicação...' })
+    ).toBeInTheDocument();
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
   });
 });
