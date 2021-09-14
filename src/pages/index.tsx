@@ -40,7 +40,7 @@ export default function Home(): JSX.Element {
         })
         .then(({ data: incomingData }) => incomingData),
     {
-      getNextPageParam: lastPage => lastPage.after,
+      getNextPageParam: lastPage => lastPage?.after || null,
     }
   );
 
